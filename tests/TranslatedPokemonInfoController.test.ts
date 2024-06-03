@@ -1,7 +1,7 @@
-import { getPokemonInfo, getTranslatedPokemonInfo } from '../src/pokemonController';
-import axios from 'axios';
-import { Request, Response } from 'express';
-import { PokeAPIResponse, FunTranslationsResponse, PokemonInfo, TranslatedPokemonInfo } from '../src/interfaces';
+import {FunTranslationsResponse, PokeAPIResponse, TranslatedPokemonInfo} from "../src/interfaces";
+import {getTranslatedPokemonInfo} from "../src/controllers/TranslatedPokemonInfoController";
+import {Request, Response} from "express";
+import axios from "axios";
 
 // Mock axios
 jest.mock('axios');
@@ -24,56 +24,16 @@ describe('Pokemon Controller', () => {
     afterEach(() => {
         jest.clearAllMocks();
     });
-
-    describe('getPokemonInfo', () => {
-        it('should return Pokemon info for a valid name', async () => {
-            req.params = { name: 'pikachu' };
-
-            const mockPokemonData: PokeAPIResponse = {
-                name: 'pikachu',
-                flavor_text_entries: [
-                    { flavor_text: 'A yellow mouse.', language: { name: 'en' } }
-                ],
-                habitat: { name: 'forest' },
-                is_legendary: false,
-            };
-
-            mockedAxios.get.mockResolvedValue({ data: mockPokemonData });
-
-            await getPokemonInfo(req as Request, res as Response);
-
-            const expectedResponse: PokemonInfo = {
-                name: 'pikachu',
-                description: 'A yellow mouse.',
-                habitat: 'forest',
-                is_legendary: false
-            };
-
-            expect(res.json).toHaveBeenCalledWith(expectedResponse);
-        });
-
-        it('should return 404 for an invalid name', async () => {
-            req.params = { name: 'invalid' };
-
-            mockedAxios.get.mockRejectedValue({ response: { status: 404 } });
-
-            await getPokemonInfo(req as Request, res as Response);
-
-            expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Pokemon not found' });
-        });
-    });
-
     describe('getTranslatedPokemonInfo', () => {
         it('should return translated Pokemon info with Shakespeare translation', async () => {
-            req.params = { name: 'pikachu' };
+            req.params = {name: 'pikachu'};
 
             const mockPokemonData: PokeAPIResponse = {
                 name: 'pikachu',
                 flavor_text_entries: [
-                    { flavor_text: 'A yellow mouse.', language: { name: 'en' } }
+                    {flavor_text: 'A yellow mouse.', language: {name: 'en'}}
                 ],
-                habitat: { name: 'forest' },
+                habitat: {name: 'forest'},
                 is_legendary: false,
             };
 
@@ -83,8 +43,8 @@ describe('Pokemon Controller', () => {
                 }
             };
 
-            mockedAxios.get.mockResolvedValue({ data: mockPokemonData });
-            mockedAxios.post.mockResolvedValue({ data: mockTranslationData });
+            mockedAxios.get.mockResolvedValue({data: mockPokemonData});
+            mockedAxios.post.mockResolvedValue({data: mockTranslationData});
 
             await getTranslatedPokemonInfo(req as Request, res as Response);
 
@@ -100,14 +60,14 @@ describe('Pokemon Controller', () => {
         });
 
         it('should return translated Pokemon info with Yoda translation for legendary Pokemon', async () => {
-            req.params = { name: 'mewtwo' };
+            req.params = {name: 'mewtwo'};
 
             const mockPokemonData: PokeAPIResponse = {
                 name: 'mewtwo',
                 flavor_text_entries: [
-                    { flavor_text: 'A psychic Pokemon.', language: { name: 'en' } }
+                    {flavor_text: 'A psychic Pokemon.', language: {name: 'en'}}
                 ],
-                habitat: { name: 'rare' },
+                habitat: {name: 'rare'},
                 is_legendary: true,
             };
 
@@ -117,8 +77,8 @@ describe('Pokemon Controller', () => {
                 }
             };
 
-            mockedAxios.get.mockResolvedValue({ data: mockPokemonData });
-            mockedAxios.post.mockResolvedValue({ data: mockTranslationData });
+            mockedAxios.get.mockResolvedValue({data: mockPokemonData});
+            mockedAxios.post.mockResolvedValue({data: mockTranslationData});
 
             await getTranslatedPokemonInfo(req as Request, res as Response);
 
@@ -134,14 +94,14 @@ describe('Pokemon Controller', () => {
         });
 
         it('should return 404 for an invalid name', async () => {
-            req.params = { name: 'invalid' };
+            req.params = {name: 'invalid'};
 
-            mockedAxios.get.mockRejectedValue({ response: { status: 404 } });
+            mockedAxios.get.mockRejectedValue({response: {status: 404}});
 
             await getTranslatedPokemonInfo(req as Request, res as Response);
 
             expect(res.status).toHaveBeenCalledWith(404);
-            expect(res.json).toHaveBeenCalledWith({ error: 'Pokemon not found' });
+            expect(res.json).toHaveBeenCalledWith({error: 'Pokemon not found'});
         });
     });
 });

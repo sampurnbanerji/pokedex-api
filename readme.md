@@ -13,7 +13,7 @@ FunTranslations API. It is built with Node.js and TypeScript, ensuring type safe
 
 1. **Get Pokémon Info**
 
-   **GET** `/pokemon/:name`
+   **GET** `/api/pokemon/:name`
 
     - **Parameters**: `name` (string) - The name of the Pokémon.
     - **Response**: JSON object containing:
@@ -24,7 +24,7 @@ FunTranslations API. It is built with Node.js and TypeScript, ensuring type safe
 
 2. **Get Translated Pokémon Info**
 
-   **GET** `/pokemon/translated/:name`
+   **GET** `/api/pokemon/translated/:name`
 
     - **Parameters**: `name` (string) - The name of the Pokémon.
     - **Response**: JSON object containing:
@@ -56,10 +56,20 @@ FunTranslations API. It is built with Node.js and TypeScript, ensuring type safe
 
 - `src/`
     - app.ts: Initializes the Express application.
-    - pokemonController.ts: Contains the logic for handling requests to the endpoints.
+      - `controllers`
+        - PokemonInfoController.ts: Contains the logic for handling requests for getting the info of the Pokemon.
+        - TranslatedPokemonInfoController.ts: Contains the logic for handling requests for getting the translated info of the Pokemon.
+      - `services`
+         - InfoService.ts: Contains the logic for calling the external info api to fetch the Pokemon Info.
+         - TranslationService.ts: Contains the logic for calling the external translated info api to fetch the  translated Pokemon Info.
+      - `routes`
+         - router.ts: Contains the configured endpoints for the application.
+      - `utils`
+         - constants.ts: Defines the constants required in the application globally.
     - interfaces.ts: Defines TypeScript interfaces for type safety.
 - `tests/`
-    - pokemonController.test.ts: Contains unit tests for the controller functions.
+    - PokemonInfoController.test.ts: Contains unit tests for the pokemon info controller functions.
+    - TranslatedPokemonInfoController.test.ts: Contains unit tests for the translated pokemon info controller functions.
 
 ## Tradeoffs and Considerations
 
@@ -88,7 +98,7 @@ FunTranslations API. It is built with Node.js and TypeScript, ensuring type safe
 9. Infrastructure as Code:
    - This project does not include Infrastructure as Code (IaC) configurations. In a production environment, using tools like Terraform, AWS CloudFormation, or Docker Compose would help automate and manage infrastructure provisioning and deployment. Implementing IaC ensures consistency across environments and enables easy scaling and maintenance. However, it adds an initial overhead in setting up the infrastructure scripts and requires knowledge of the IaC tools.
 10. Code Configuration: 
-    - Code can be re-sturctured based on different design principles like SOLID, MVC, etc.  
+    - Code can be re-structured based on different design principles like SOLID, MVC, etc.  
 
 ## Conclusion
 
